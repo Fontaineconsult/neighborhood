@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
+<body>
+<div class="container">
+
+
+    <p>Search: <input type="text" data-bind="textInput: locationSearch"/></p>
+<div data-bind="foreach: koLocationList()">
+    <div data-bind="visible: locationVisible">
+    <button data-bind="click: $parent.koToggleMarker"><span data-bind="text: title" ></span></button>
+    </div>
+</div>
+
+    <span data-bind="text: locationSearch"></span>
+</div>
+
+<div data-bind="foreach: koLocalLocationList()">
+    <button data-bind="click: $parent.zoomToMarker"><span data-bind="text: name" ></span></button>
+
+</div>
+<div id="map"></div>
+<script src="js/lib/jquery.min.js"></script>
+<script src="js/lib/knockout-3.2.0.js"></script>
+<script src="js/locations.js"></script>
+<script src="js/map.js"></script>
+<script src="js/viewmodel.js"></script>
+<script src="js/wikiAPI.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhVmGu1gZj8Te0iYhIQYoNvPXFP7ctdjo&callback=initMap&libraries=places"
+        async defer></script>
+</body>
+<pre data-bind="text: ko.toJSON($root, null, 2)"></pre>
+</html>
