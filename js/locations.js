@@ -6,12 +6,14 @@ var locations = [
             'Halcyon Residences',
             'PVR Cinemas',
             'Barleyz',
-            'Kargreens',
+            'Kargeens Cafe',
             'Commercial Street',
             'Bannerghatta National Park',
             'Ganjam Mantapa',
             'Third Wave Coffee Roasters | Koramangala',
-            'The Oasis Centre']
+            'The Oasis Centre',
+            'Saravana Esplanade',
+            'Kempegowda International Airport']
     },
 
     {title:'Mumbai',

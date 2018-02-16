@@ -59,6 +59,7 @@ var viewModel = function () {
     self.updateLocalObservableLocations = function (textSearchObject, locationsArrayIndex) {
         var localMarker = locations[locationsArrayIndex].title;
         var obslocalloc = new observableLocalLocation(textSearchObject, locationsArrayIndex);
+
         if (localMarker !== undefined) {
             if (self.koLocalLocationList().length > 0) {
                 if (self.koLocalLocationList()[0].greaterLocation() === localMarker) {
