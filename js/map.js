@@ -52,7 +52,7 @@ loadTextSearchData = function (locationsArrayIndex) {
         this.requestStatus = {location: localLocation, requestComplete : false, locked: false, apiCalls: 0, unableToComplete: false}
         this.makeGoogleApiRequest = function () {
             if (this.requestStatus.apiCalls < 2){
-            setTimeout(googlePlacesApiCall, 250 * this.timerMultiplier, this.requestStatus.location)
+            setTimeout(googlePlacesApiCall, 400 * this.timerMultiplier, this.requestStatus.location)
             this.requestStatus.apiCalls++
             } else {
                 this.requestStatus.unableToComplete = true;
@@ -177,15 +177,13 @@ loadTextSearchData = function (locationsArrayIndex) {
 
     }
     initLocalLocationLoop()
-
-
 };
 
 
 
-buildLocalMarkers = function(locationsArrayIndex, locationLatLng, textSearchResultData) {
+buildLocalMarkers = function(locationsArrayIndex, locationLatLng, textSearchResultData) { // takes the initial location index, the initial location LatLng, and the search data for the local locations
 
-    var doesLocalMarkerExist = localMarkers.filter(function(object){ //checks if local marker already exists.
+    var doesLocalMarkerExist = localMarkers.filter(function(object){ //checks if local marker already exists in the 'localMarkers' array
         return object.id == textSearchResultData.id});
 
     if (doesLocalMarkerExist.length === 1) {
@@ -202,7 +200,8 @@ buildLocalMarkers = function(locationsArrayIndex, locationLatLng, textSearchResu
             map: map,
             animation: google.maps.Animation.DROP,
             id: textSearchResultData.id,
-            visible: true
+            visible: true,
+            greaterLocationIndex: locationsArrayIndex
         });
         localMarkers.push(localMarker);
         addLocalInfoWindow(localMarker, textSearchResultData);
