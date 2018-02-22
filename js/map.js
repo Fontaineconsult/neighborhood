@@ -178,9 +178,6 @@ loadTextSearchData = function (locationsArrayIndex) {
     }
     initLocalLocationLoop()
 };
-
-
-
 buildLocalMarkers = function(locationsArrayIndex, locationLatLng, textSearchResultData) { // takes the initial location index, the initial location LatLng, and the search data for the local locations
 
     var doesLocalMarkerExist = localMarkers.filter(function(object){ //checks if local marker already exists in the 'localMarkers' array
@@ -203,9 +200,11 @@ buildLocalMarkers = function(locationsArrayIndex, locationLatLng, textSearchResu
             visible: true,
             greaterLocationIndex: locationsArrayIndex
         });
-        localMarkers.push(localMarker);
+        var markerIndexReturn = localMarkers.push(localMarker);
+        var index = markerIndexReturn - 1
+        console.log(index)
         addLocalInfoWindow(localMarker, textSearchResultData);
-        activeViewModel.updateLocalObservableLocations(textSearchResultData, locationsArrayIndex)
+        activeViewModel.updateLocalObservableLocations(textSearchResultData, locationsArrayIndex, index)
 
     }
 
@@ -214,26 +213,26 @@ buildLocalMarkers = function(locationsArrayIndex, locationLatLng, textSearchResu
 
 };
 toggleAllMarkersOn =  function () {
-    markers.forEach (function(marker) {
+    localMarkers.forEach (function(marker) {
         marker.setMap(map);
     })
 };
-toggleMarker = function (data, value) {
-    if (typeof data === 'undefined') {console.log('Data is undefined');
+toggleMarker = function (index, value) {
+    if (typeof index === 'undefined') {console.log('Data is undefined');
     } else {
         if (value === undefined) {
-            if (markers[data].map !== null) {
-                markers[data].setMap(null);
+            if (localMarkers[index].map !== null) {
+                localMarkers[index].setMap(null);
             } else {
-                markers[data].setMap(map);
+                localMarkers[index].setMap(map);
             }
         } else if (value === 'on') {
-            if (markers[data].map !== null) {
+            if (localMarkers[index].map !== null) {
             } else {
-                markers[data].setMap(map);
+                localMarkers[index].setMap(map);
             }
         } else if (value === 'off') {
-            markers[data].setMap(null);
+            localMarkers[index].setMap(null);
         }
     }
 };
@@ -267,7 +266,6 @@ infoWindowPageConstructor = function (marker) {
 
     return infoWindowContent;
 };
-
 localInfoWindowPageConstructor = function (marker, textSearchResultData) {
     var locationName = textSearchResultData.name;
     var typeIcon = textSearchResultData.icon;
@@ -284,8 +282,6 @@ localInfoWindowPageConstructor = function (marker, textSearchResultData) {
     var windowHTML = "<div>" + locationName + "<img src='" + typeIcon + "' >" + "<br><br>" + locationAddy + "<br><br>"+ "<img src='" + placePhoto() + "' >" + "</div>";
     return windowHTML;
 };
-
-
 addInfoWindow = function (marker) {
 
     markers[marker.id].addListener('click', function() {
@@ -298,8 +294,6 @@ addInfoWindow = function (marker) {
         openedWindows.push(infowindow);
     });
 };
-
-
 zoomToMarker = function (markerIndex) {
 
     var marker = localMarkers.filter(function(object){return object.id == markerIndex});
@@ -308,7 +302,6 @@ zoomToMarker = function (markerIndex) {
     map.panTo(marker[0].position)
 
 };
-
 addLocalInfoWindow = function (localMarker, textSearchResultData) {
 
 
@@ -322,16 +315,14 @@ addLocalInfoWindow = function (localMarker, textSearchResultData) {
         openedWindows.push(infowindow);
     });
 };
-
-
 viewModelClickInit = function (locationsArrayIndex) {
+
     closeAllInfoWindows()
     panToMarker(locationsArrayIndex);
     loadTextSearchData(locationsArrayIndex)
 
 
 };
-
 panToMarker = function(i) {
     map.panTo(markers[i].getPosition());
     map.setZoom(11);

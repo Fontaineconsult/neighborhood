@@ -8,37 +8,43 @@ var observableLocation = function (data, index, location) {
     this.trueName = ko.observable(data.trueName);
     this.locationVisible = ko.computed(function () {
         if (location() === "") { // if the search field is empty, turn all markers on and set visible to true
-            toggleAllMarkersOn()
-            return true
+            //toggleAllMarkersOn()
+            //return true
         } else {
             if (this.title().indexOf(location())) { //location() is the search field value
-                toggleMarker(this.index(), 'off');
-                return false
+               // toggleMarker(this.index(), 'off');
+               // return false
             } else {
-                toggleMarker(this.index(), 'on');
-                return true
+               // toggleMarker(this.index(), 'on');
+               // return true
             }
         }}, this)
 
 
 };
-var observableLocalLocation = function(textSearchObject, locationsArrayIndex){
+var observableLocalLocation = function(textSearchObject, locationsArrayIndex, locationSearch, markerIndex){
     this.name = ko.observable(textSearchObject.name);
+    this.markerIndex = markerIndex;
     this.greaterLocation = ko.observable(locations[locationsArrayIndex].title);
-    this.locationID = ko.observable(textSearchObject.id)
+    this.locationID = ko.observable(textSearchObject.id);
     this.locationVisible = ko.computed(function () {
-        if (this.name().indexOf("something")){
-            console.log("feerrtsss");
+        if (locationSearch() === "") { // if the search field is empty, turn all markers on and set visible to true
+            toggleAllMarkersOn()
+            console.log("STERRTSSSS")
             return true
         } else {
-            console.log("furrrts");
-            return false
-        }
+            if (this.name().indexOf(locationSearch())) { //location() is the search field value
+                toggleMarker(this.markerIndex, 'off')
+                console.log(this.name(), this.markerIndex, 'off')
+                return false
+            } else {
+                toggleMarker(this.markerIndex, 'on')
+                console.log(this.name(), this.markerIndex, 'on')
+                return true
+            }
+        }}, this)
 
-
-    }, this)
-
-}
+};
 
 
 var viewModel = function () {
@@ -62,9 +68,9 @@ var viewModel = function () {
         viewModelClickInit(index.index());
     };
 
-    self.updateLocalObservableLocations = function (textSearchObject, locationsArrayIndex) {//textSearchObject = google places API data for locals location search. locationsArrayIndex = the index of the greater location buttons
+    self.updateLocalObservableLocations = function (textSearchObject, locationsArrayIndex, index) {//textSearchObject = google places API data for locals location search. locationsArrayIndex = the index of the greater location buttons
         var localMarker = locations[locationsArrayIndex].title;
-        var obslocalloc = new observableLocalLocation(textSearchObject, locationsArrayIndex);
+        var obslocalloc = new observableLocalLocation(textSearchObject, locationsArrayIndex, self.locationSearch, index);
         if (localMarker !== undefined) {
             console.log(localMarker)
             if (self.koLocalLocationList().length > 0) { //this means there are already knockout observable markers on the screen

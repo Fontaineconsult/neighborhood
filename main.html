@@ -13,16 +13,19 @@
     <p>Search: <input type="text" data-bind="textInput: locationSearch"/></p>
 <div data-bind="foreach: koLocationList()">
 
-    <div data-bind="visible: locationVisible">
+
     <button data-bind="click: $parent.koToggleMarker"><span data-bind="text: title" ></span></button>
-    </div>
+
 
 </div>
     <span data-bind="text: locationSearch"></span>
 </div>
 
 <div data-bind="foreach: koLocalLocationList()">
+
+    <div data-bind="visible: locationVisible">
     <button data-bind="click: $parent.zoomToMarker"><span data-bind="text: name" ></span></button>
+    </div>
 
 </div>
 <div id="map"></div>
