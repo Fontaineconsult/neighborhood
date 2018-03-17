@@ -4,17 +4,37 @@
 function loadWikiData(location, markerIndex) {
 
     var wikiSummaryRequestTimeout = setTimeout(function () {
-        placeInfo[markerIndex].wikiData.push('Failed to load Wiki Data')
 
-    }, 2000);
+        try {
+            placeInfo[markerIndex].wikiData.push('Failed to load Wiki Data')
+        } catch (typeError) {
+
+        }
+
+
+    }, 8000);
+
     var wikiRequestTimeout = setTimeout(function () {
-        placeInfo[markerIndex].wikiData.summary.push('Failed to load Wiki Data')
 
-    }, 2000);
+        try {
+            placeInfo[markerIndex].wikiData.summary.push('Failed to load Wiki Data')
+
+        } catch (typeError) {
+            $("#wikiContainer").append("Failed To Load Wiki Data")
+
+        }
+
+    }, 8000);
 
     function summaryCallback(data) {
+
         pageId = data.query.pageids[0];
-        placeInfo[markerIndex].wikiData.summary.push(data.query.pages[pageId].extract)
+        try {
+            placeInfo[markerIndex].wikiData.summary.push(data.query.pages[pageId].extract)
+
+        } catch (typeError) {
+
+        }
     }
 
     function ImageSearchCallback(data) {
@@ -23,11 +43,9 @@ function loadWikiData(location, markerIndex) {
         imageLocation.forEach(function (image) {
             getWikiImgUrl(image.title, markerIndex)
         })
-
-
         //placeInfo[markerIndex].wikiData.ImageSearch.push(data.query.pages[pageId].images)
-
     }
+
     $.ajax( {
 
         url: "https://en.wikipedia.org/w/api.php",
@@ -46,6 +64,17 @@ function loadWikiData(location, markerIndex) {
         success: function (data) {
             summaryCallback(data);
             clearTimeout(wikiSummaryRequestTimeout);
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            ajaxError("Explain Text")
+            if (XMLHttpRequest.readyState === 0) {
+                ajaxError("Explain Text")
+            }
+
+        }
+
+    }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+        if (XMLHttpRequest.readyState === 0) {
         }
 
     });
@@ -65,12 +94,23 @@ function loadWikiData(location, markerIndex) {
         success: function (data) {
             ImageSearchCallback(data);
             clearTimeout(wikiRequestTimeout);
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            if (XMLHttpRequest.readyState === 0) {
+                ajaxError("Explain Text")
+            }
+        }
+
+    }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+        if (XMLHttpRequest.readyState === 0) {
+            ajaxError("Immmaggeessss")
         }
 
     });
 }
 
 function getWikiImgUrl(wikiImgId, markerIndex) {
+
     var wikiImageReqURL = setTimeout(function () {
         placeInfo[markerIndex].wikiData.summary.push('Failed to load Wiki Data')
 
@@ -79,6 +119,7 @@ function getWikiImgUrl(wikiImgId, markerIndex) {
         pageId = data.query.pageids[0];
         placeInfo[markerIndex].wikiData.ImageSearch.push(data.query.pages[pageId].imageinfo[0].url)
     }
+
 
     $.ajax( {
 
@@ -97,8 +138,18 @@ function getWikiImgUrl(wikiImgId, markerIndex) {
         success: function (data) {
             imageUrlCallback(data);
             clearTimeout(wikiImageReqURL);
+        },
+        error: function () {
+            ajaxError()
+        }
+
+    }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+        ajaxError("Immmaggeessss")
+        if (XMLHttpRequest.readyState === 0) {
+            ajaxError("Immmaggeessss")
         }
 
     });
 
 }
+
