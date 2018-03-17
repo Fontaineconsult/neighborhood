@@ -1,0 +1,542 @@
+
+
+#map {
+    height: 100%;
+    width: 100%;
+
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    max-width: 1400px;
+}
+
+.welcome-overlay {
+    position: absolute;
+    z-index: 999;
+    width: 100vw;
+    height: 100%;
+    background: rgba(168, 179, 211, 0.71);
+}
+
+
+.welcome-message-center-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    height: 40vh;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    border-top-style: solid;
+    border-bottom-style: solid;
+    border-color: rgba(57, 80, 119, 0.71);
+    border-width: 5px;
+}
+
+.welcome-message-inner-container {
+    width: 40%;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.welcome-message-title {
+    text-align: center;
+    height: 20%;
+    color: white;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: bold;
+    font-size: xx-large;
+    padding-top: 0.2em;
+}
+
+.welcome-message-content {
+    text-align: center;
+    height: 60%;
+    color: white;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: bold;
+    line-height: 1.7em;
+}
+
+.welcome-message-footer {
+    height: 20%;
+    display: flex;
+}
+
+#closeButton {
+    width: 9vw;
+    height: 5vh;
+    background-color: white;
+    font-size: larger;
+    font-family: 'Ubuntu', sans-serif;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 80px;
+}
+
+.master-container {
+    height: 100%;
+    margin-left: 6vw;
+    width: 85vw;
+}
+
+.upper-container {
+    height: 4.5vh;
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    z-index: 9;
+    min-height: 40px;
+    background-color: lightgrey;
+    border-top-width: 2px;
+    border-top-color: #395077;
+    border-top-style: solid;
+    box-shadow: slategrey;
+    border-bottom-width: 5px;
+    border-bottom-style: solid;
+    border-bottom-color: #efeced;
+
+}
+
+.main-location-selectors {
+    margin-left: auto;
+    margin-right: auto;
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    z-index: 8;
+
+}
+
+
+
+.greater-location-button {
+    height: 100%;
+    min-width: 120px;
+
+}
+
+.main-location-selector-text {
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: bold;
+}
+
+.map-container {
+    height: 100%;
+    width: 100%;
+    border-top-width: 1px;
+    border-top-color: slategrey;
+    border-top-style: solid;
+    box-sizing: border-box;
+}
+
+.lower-container {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    height: 85%;
+    border-bottom-style: solid;
+    border-bottom-color: slategrey;
+    border-bottom-width: 2px;
+}
+
+#wikiContainer {
+    max-width: 25%;
+    min-width: 2%;
+    background-color: #fbfbfb;
+    border-left-style: solid;
+    border-left-color: slategrey;
+    border-left-width: 1px;
+    border-right-width: 2px;
+    border-right-style:  solid;
+    border-right-color: slategrey;
+
+
+
+}
+
+.wiki-content{
+    padding-left: 4px;
+    padding-right: 4px;
+    overflow-y: auto;
+    height: 70%;
+    font-family: 'Ubuntu', sans-serif;
+    background-color: white;
+}
+
+.wiki-content-full {
+    background-color: white;
+}
+
+.wiki-content-header {
+    width: 100%;
+    height: 4%;
+    background-color: #395077;
+    display: inline-flex;
+    border-top-style: solid;
+    border-top-color: slategrey;
+    border-top-width: 1px;
+    border-bottom-width: 2px;
+    border-bottom-color: #9cd3ff;
+    border-bottom-style: solid;
+
+
+}
+
+.wiki-picture-container {
+    display: inline-flex;
+    height: 26%;
+    width: 100%;
+    overflow-x: auto;
+    border-top-style: solid;
+    border-top-color: #b2b2b2;
+    border-top-width: 1px;
+    box-sizing: border-box;
+    padding-top: 2px;
+    padding-bottom: 5px;
+}
+
+.wiki-image {
+    display: inline-flex;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    padding-right: 5px;
+    border-right-style: solid;
+    border-right-width: 1px;
+    margin-right: 5px;
+}
+
+.wiki-image-container-background {
+    height: 100vh;
+    width: 100vw;
+    background-color: black;
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    opacity: 0.8;
+}
+
+
+
+.big-wiki-image-container {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    z-index: 11;
+}
+
+
+.big-wiki-image {
+    max-height: 70vh;
+    width: auto;
+    height: auto;
+    z-index: 11;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+    border-style: solid;
+    border-color: white;
+}
+
+.wiki-content-title {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.close-button {
+    display: none;
+}
+
+.invisible {
+    display: none !important;
+
+}
+
+
+.location-header {
+    background-color: #395077;
+    width: 100%;
+    height: 5%;
+    display: inline-flex;
+    border-bottom-width: 1px;
+    border-bottom-color: #9cd3ff;
+    border-bottom-style: solid;
+    border-top-style: solid;
+    border-top-color: slategrey;
+    border-top-width: 1px;
+    box-sizing: border-box;
+
+}
+
+.local-location-header-text {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    font-family: 'Ubuntu', sans-serif;
+
+}
+
+
+
+.local-location-container {
+    overflow-y: auto;
+    height: 100%;
+    background-color: #fbfbfb
+
+}
+
+.outer-location-container {
+    border-left-style:  solid;
+    border-left-width: 2px;
+    border-left-color: slategrey;
+    border-right-style: solid;
+    border-right-color: slategrey;
+    border-right-width: 1px;
+    min-width: 12vw;
+
+
+
+}
+
+.outer-location-minwidth {
+    min-width: 2% !important;
+}
+
+.local-location-button:first-child {
+    border-style: solid;
+    border-top-width: 1px;
+    border-color: slategrey;
+}
+
+
+.local-location-button {
+    border-style: solid;
+    border-bottom-width: 1px;
+    border-color: slategrey;
+    width: 100%;
+    height: 4.5em;
+    display: inline-flex;
+    background: linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%);
+}
+
+.local-location-text {
+    text-align: left;
+    font-family: 'Ubuntu', sans-serif;
+    padding-left: 3px;
+    text-transform: capitalize;
+
+}
+
+
+.local-location-icon {
+    width: 15px;
+    height: 15px;
+    margin-left: auto;
+    margin-right: 0;
+    display: inline;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.location-visible {
+    width: 100%;
+
+}
+
+
+.search-bar {
+    display: inline-flex;
+    height: 100%;
+    width: 98%;
+    background-color: #fbfbfb
+}
+
+
+
+.search-bar-title {
+    height: 100%;
+    width: 4em;
+    font-size: 15pt;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: lightgrey;
+
+}
+
+.search-bar-title p {
+    margin: 0
+}
+
+
+
+.middle-container {
+    height: 3vh;
+    border-top-style: solid;
+    border-left-style: solid;
+    border-right-style: solid;
+    border-top-width: 2px;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-color: slategrey;
+    min-height: 30px;
+    background-color: #fbfbfb
+
+}
+
+.text-search-input {
+    height: 60%;
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: 14pt;
+}
+
+.spacer {
+    height: 7vh;
+}
+
+.local-info-window {
+    max-width: 20vw;
+}
+
+
+.location-name-top {
+    display: inline-flex;
+    width: 100%;
+    border-bottom-color: #395077;
+    border-bottom-style: solid;
+}
+
+.location-name-text {
+    font-family: 'Ubuntu', sans-serif;
+    text-transform: capitalize;
+    font-size: medium;
+
+}
+
+.location-address {
+    margin-top: 3px;
+    margin-bottom: 3px;
+    background-color: whitesmoke;
+    padding: 2px;
+}
+
+.type-icon {
+    right: 0;
+    margin-left: auto;
+    width: 40px;
+    height: 40px;
+    padding-bottom: 3px;
+}
+
+
+.info-svg-container {
+    display: none;
+}
+
+.missing-location-container {
+    height: 5%;
+    width: 100%;
+    display: inline-flex;
+}
+
+.missing-location-counter {
+    margin-top: auto;
+    margin-bottom: auto;
+    height: 1em;
+    font-size: small;
+    padding-left: 5%;
+}
+
+#loaderContainer {
+    height: 90%;
+    margin-right: 4px;
+    margin-top: 3px;
+}
+
+/* CSS Loader code borrowed from Luke Hass, https://projects.lukehaas.me/css-loaders/  */
+.loader {
+    font-size: 9px;
+    margin: auto;
+    text-indent: -9999em;
+    width: 3em;
+    height: 3em;
+    border-radius: 50%;
+    background: #b2b2b2;
+    background: -moz-linear-gradient(left, #b2b2b2 10%, rgba(178,178,178, 0) 42%);
+    background: -webkit-linear-gradient(left, #b2b2b2 10%, rgba(178,178,178, 0) 42%);
+    background: -o-linear-gradient(left, #b2b2b2 10%, rgba(178,178,178, 0) 42%);
+    background: -ms-linear-gradient(left, #b2b2b2 10%, rgba(178,178,178, 0) 42%);
+    background: linear-gradient(to right, #b2b2b2 10%, rgba(178,178,178, 0) 42%);
+    position: relative;
+    -webkit-animation: load3 1.4s infinite linear;
+    animation: load3 1.4s infinite linear;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+}
+.loader:before {
+    width: 50%;
+    height: 50%;
+    background: #b2b2b2;
+    border-radius: 100% 0 0 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: '';
+}
+.loader:after {
+    background: #395077;
+    width: 75%;
+    height: 75%;
+    border-radius: 50%;
+    content: '';
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+@-webkit-keyframes load3 {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@keyframes load3 {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
