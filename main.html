@@ -5,38 +5,73 @@
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="stylesheet" type="text/css" href="css/moble.css">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
 </head>
 <body>
-<div class="container">
-
-
-    <p>Search: <input type="text" data-bind="textInput: locationSearch"/></p>
-<div data-bind="foreach: koLocationList()">
-
-
-    <button data-bind="click: $parent.koToggleMarker"><span data-bind="text: title" ></span></button>
-
-
+<div class="upper-container" id="upper-container">
+    <div class="upper-button-container">
+        <div onclick="toggleWikiWindow()" class="info-svg-container">
+        <svg class="info-svg" xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve">
+            <metadata> Svg Vector Icons : http://www.onlinewebfonts.com/icon </metadata>
+            <g><path fill="#395077" d="M500,10C229.4,10,10,229.4,10,500c0,270.6,219.4,490,490,490c270.6,0,490-219.4,490-490C990,229.4,770.6,10,500,10z M499.6,929.4C263.4,929.4,71.9,738,71.9,501.8c0-236.2,191.5-427.6,427.7-427.6c236.2,0,427.6,191.5,427.6,427.6C927.2,738,735.7,929.4,499.6,929.4z"/><path fill="#395077" d="M530.4,752.9c0,16.8-13.6,30.4-30.4,30.4l0,0c-16.8,0-30.4-13.6-30.4-30.4V341.8c0-16.8,13.6-30.4,30.4-30.4l0,0c16.8,0,30.4,13.6,30.4,30.4V752.9z"/><path d="M530.4,246.6c0,16.8-13.6,30.4-30.4,30.4l0,0c-16.8,0-30.4-13.6-30.4-30.4v0.5c0-16.8,13.6-30.4,30.4-30.4l0,0c16.8,0,30.4,13.6,30.4,30.4V246.6z"/></g>
+        </svg>
+    </div>
+        <div class="hamburger" id="hamburger" onclick='openGreaterLocationMenu()'>
+            <div class="blackbar"></div>
+            <div class="blackbar"></div>
+            <div class="blackbar"></div>
+        </div>
+    </div>
+    <div data-bind="foreach: koLocationList()" class="main-location-selectors" id="mainLocationSelectors">
+        <button data-bind="click: $parent.koToggleMarker" class="greater-location-button"><span class="main-location-selector-text" data-bind="text: title" ></span></button>
+    </div>
 </div>
-    <span data-bind="text: locationSearch"></span>
+<div class="master-container" id="master-container">
+<div class="spacer"></div>
+<div class="middle-container">
+    <div class="search-bar">
+        <div class="search-bar-title"><p>Search</p></div><input type="text" class="text-search-input" data-bind="textInput: locationSearch"/>
+    </div>
 </div>
+<div class="lower-container">
 
-<div data-bind="foreach: koLocalLocationList()">
-
-    <div data-bind="visible: locationVisible">
-    <button data-bind="click: $parent.zoomToMarker"><span data-bind="text: name" ></span></button>
+    <div class="outer-location-container outer-location-minwidth portrait-invisible" id="outer-location-container">
+    <div class="location-header invisible" id="location-header">
+        <div class="local-location-header-text">Locations</div></div>
+        <div class="missing-location-container invisible" id="missingLocationContainer">
+            <span id="missinglocationcounter" class="missing-location-counter" data-bind="text: missingLocationsObservable()"></span>
+        </div>
+    <div data-bind="foreach: koLocalLocationList()" class="local-location-container" id="localLocationList">
+        <div data-bind="visible: locationVisible" class="location-visible" >
+            <button data-bind="click: $parent.zoomToMarker" class="local-location-button">
+                <div class="local-location-text" data-bind="text: name" >
+                </div>
+                <img class="local-location-icon"  data-bind="attr : {src: locationIcon}">
+                    </button>
+        </div>
     </div>
 
 </div>
-<div id="map"></div>
+
+
+    <div class="map-container">
+    <div id="map"></div>
+</div>
+    <div id="wikiContainer" class="portrait-invisible">
+    </div>
+</div>
+</div>
+
 <script src="js/lib/jquery.min.js"></script>
 <script src="js/lib/knockout-3.2.0.js"></script>
 <script src="js/locations.js"></script>
 <script src="js/map.js"></script>
 <script src="js/viewmodel.js"></script>
 <script src="js/wikiAPI.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhVmGu1gZj8Te0iYhIQYoNvPXFP7ctdjo&callback=initMap&libraries=places"
+<script src="js/wikiPageBuilder.js"></script>
+<script src="js/error_handler.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhVmGu1gZj8Te0iYhIQYoNvPXFP7ctdjo&callback=initMap&libraries=places,geometry"
         async defer></script>
 </body>
-<pre data-bind="text: ko.toJSON($root, null, 2)"></pre>
 </html>
