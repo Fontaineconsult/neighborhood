@@ -40,3 +40,7 @@ used: Google Maps JS Api and the Wikimedia API. An internet connection is requir
 
 Once the repo is cloned. You can find main.html in the root directory. Simply open in directl in your web browser. 
 
+### Comments
+
+JS Doc was used to provide comment structure. You can find a structured list of comments in js/out/index.html
+
