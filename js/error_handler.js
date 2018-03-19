@@ -8,24 +8,19 @@ let counterVisible = false;
  * @param greaterLocationIndex
  */
 const googlePlacesApiUnknownErr = function (greaterLocationIndex) {
-    let errorCalls = 0;
-    errorCalls++;
-    function insertLoaderDiv() {
-        if (errorCalls === 1) {
-            $("#location-header").append("<div id='loaderContainer'><div class='loader'></div></div>")
-        }
-    }
-
+    console.log("Can't load greater location ", greaterLocationIndex)
+    let alertMessage = "Can't load the Google Map JS Api";
+    window.alert(alertMessage)
 
 };
-
-
 /**
  * @function undefinedMarkerErr
  * @description called when markers are not successfully pushed into their respective arrays
  */
 const undefinedMarkerErr = function () {
     console.log("Couldn't Find Marker Data")
+    let alertMessage = "Can't load marker data"
+    window.alert(alertMessage)
 };
 
 /**
@@ -37,8 +32,8 @@ const undefinedMarkerErr = function () {
 
 const generalDisconnectedHandler = function (error) {
     console.log("General Disconnect " + error);
-
-    $("#master-container").prepend("<div class='disconnected-overlay'></div>")
+    let alertMessage = "There appears to be a connection issue: n\ " + error;
+    window.alert(alertMessage)
 
 
 };
@@ -51,6 +46,8 @@ const generalDisconnectedHandler = function (error) {
 
 const ajaxError = function (error) {
     console.log("AJAX ERROR ", error)
+    let alertMessage = "Something went wrong a Wikipedia data request"
+    window.alert(alertMessage)
 };
 
 /**
