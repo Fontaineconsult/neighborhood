@@ -12,7 +12,7 @@ to match the attention to detail of the underlying functionality.
 However, a lot of time was spent figuring out a model that allowed me to easily and reliably bypass Google Maps query limit. Of course, this
 would not be an issue for paying customers, but it was a challenging and rewarding programming exercise nonetheless. 
 
-The program is split into four main components, map.js, viewmodel.js, wikiAPI.js, error_handler.js, and wikiPageBuilder.js. Each file handles
+The program is split into 5 main components, map.js, viewmodel.js, wikiAPI.js, error_handler.js, and wikiPageBuilder.js. Each file handles
 an unique set of responsibilities.
 
 map.js is responsible for all the code related to controling the Google Maps Api. It handles displaying the map, building markers and their
