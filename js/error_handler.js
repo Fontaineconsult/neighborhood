@@ -76,7 +76,7 @@ const cancelLocalLocationResponseTimeouts = function () {
         }
     })
 
-}
+};
 
 /**
  * @function localLocationNoResponse
@@ -117,7 +117,7 @@ const removeMissingLocationElement = function () {
         $("#missingLocationCounter").remove();
         $("#localLocationList").removeAttr("style");
         document.getElementById("missingLocationContainer").classList.add("invisible");
-        counterVisible = false
+        counterVisible = false;
         activeViewModel.missingLocationsObservable(0)
     }
 

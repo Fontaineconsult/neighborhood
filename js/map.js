@@ -38,13 +38,7 @@ let openedWindows = [];
 let localMarkerInfo = [];
 
 
-
 let keepTrackOfLocalLocations = [];
-
-
-
-
-
 
 
 /**
@@ -102,7 +96,7 @@ function initMap() {
 
 viewModelClickInit = function (locationsArrayIndex) {
 
-    closeAllInfoWindows()
+    closeAllInfoWindows();
     panToMarker(locationsArrayIndex);
     activeLocation = locationsArrayIndex;
     loadTextSearchData(locationsArrayIndex)
@@ -122,35 +116,34 @@ loadTextSearchData = function (locationsArrayIndex) {
 
     /**
      *@class localLocationsTracker
-     *@description A new localLocationsTracker is constructed for each member in the locations.localLocations array. localLocationsTracker manages API calls for each localLocations.
+     *@description A new localLocationsTracker is constructed for each member in the locations.localLocations array. localLocationsTracker manages API calls for each localLocations. Most of the effort here is to stage the requests to get around the google map api query limit.
      *@param {string} localLocation name of 'locationName' in the locations.Localocations
      *@param {number} index the index of 'locationName'
      *@param {number} greaterLocationIndex Wider location index number
      */
 
     const localLocationsTracker = function(localLocation, index, greaterLocationIndex) {
-        this.requestTimeoutIDs = [];
-
-        this.timerMultiplier = index;
-        this.greaterLocationIndex = greaterLocationIndex;
-        this.requestStatus = {location: localLocation, requestComplete : false, locked: false, apiCalls: 0, unableToComplete: false};
+        this.requestTimeoutIDs = []; //keeps a list of the active timeouts for each request
+        this.timerMultiplier = index; //multiplier is used to stage each request to avoid overloading the api server request limit
+        this.greaterLocationIndex = greaterLocationIndex; //simple the index of the greater location this local location is assocated with
+        this.requestStatus = {location: localLocation, requestComplete : false, locked: false, apiCalls: 0, unableToComplete: false}; //the request status object keeps track of the important stages of the request process.
         this.makeGoogleApiRequest = function () {
             if (this.requestStatus.apiCalls < 2){
                 setTimeout(googlePlacesApiCall, 400 * this.timerMultiplier, this.requestStatus.location);
-                this.responseTimeout()
+                this.responseTimeout();
                 toggleLoaderAnimation.addCount();
                 this.requestStatus.apiCalls++
 
             } else {
                 this.requestStatus.unableToComplete = true;
                 console.log("Not able to find:", this.requestStatus.location);
-                this.cancelResponseTimeout()
+                this.cancelResponseTimeout();
                 toggleLoaderAnimation.removeCount()
             }
-        };
+        }; // each location tracker object can call the google API independly, giving me a bit of flexibility in re-requesting the data if a prior request fails.
         this.setStatus = function (value) {
             this.requestStatus.requestComplete = true;
-            this.cancelResponseTimeout()
+            this.cancelResponseTimeout();
             toggleLoaderAnimation.removeCount()
         };
         this.setLock = function (value, timeout) {
@@ -168,18 +161,18 @@ loadTextSearchData = function (locationsArrayIndex) {
 
         this.clearFirstTimeout = function () {
             clearTimeout(this.requestTimeoutIDs.shift())
-        }
+        }; //unused
         this.cancelResponseTimeout = function () {
             this.requestTimeoutIDs.forEach(function (timeOutID) {
                 clearTimeout(timeOutID)
             })
 
-        };
+        }; //cancels any currently in play api requests.
 
         this.responseTimeout = function () {
             let timeoutID = setTimeout(noResponseCallback, 400 * this.timerMultiplier + 7000 , this.requestStatus.location.locationName);
             this.requestTimeoutIDs.push(timeoutID)
-        };
+        }; // the response timeout. if no api reponse is returned in time, it fires and lets the user know something is missing.
 
         this.makeGoogleApiRequest()
 
@@ -189,7 +182,7 @@ loadTextSearchData = function (locationsArrayIndex) {
      * @description Checks if location data already exists, if it doesn't a new localLocationTracker is created.
      */
     function initLocalLocationLoop(){
-        keepTrackOfLocalLocations = []
+        keepTrackOfLocalLocations = [];
         locations[locationsArrayIndex].localLocations.forEach(function (localLocation, index) {
             let localLocationData = localMarkerInfo.filter(function(object){ //checks if google place data already exists in local array
 
@@ -276,7 +269,7 @@ loadTextSearchData = function (locationsArrayIndex) {
                             lati = location.geometry.location.lat();
                             long = location.geometry.location.lng();
                             locationLatLng = {lat: lati, lng: long};
-                            buildLocalMarkers(locationsArrayIndex, locationLatLng, location)
+                            buildLocalMarkers(locationsArrayIndex, locationLatLng, location);
                             setLocationTrackerStatus(location.name, true);
                             localMarkerInfo.push(location);
                         }
@@ -285,7 +278,7 @@ loadTextSearchData = function (locationsArrayIndex) {
                     lati = locationNameMatch[0].geometry.location.lat();
                     long = locationNameMatch[0].geometry.location.lng();
                     locationLatLng = {lat: lati, lng: long};
-                    buildLocalMarkers(locationsArrayIndex, locationLatLng, locationNameMatch[0])
+                    buildLocalMarkers(locationsArrayIndex, locationLatLng, locationNameMatch[0]);
                     setLocationTrackerStatus(locationNameMatch[0].name, true);
                     localMarkerInfo.push(locationNameMatch[0]);
                 } else if (locationNameMatch.length === 0) {
@@ -298,7 +291,7 @@ loadTextSearchData = function (locationsArrayIndex) {
                     apiErrors++
                 }
                 else if (status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
-                    apiErrors++
+                    apiErrors++;
                     console.log("No Results", status)
                 }
                 else if (status === google.maps.places.PlacesServiceStatus.UNKNOWN_ERROR || google.maps.places.PlacesServiceStatus.ERROR ) {
@@ -327,7 +320,7 @@ loadTextSearchData = function (locationsArrayIndex) {
                 lati = nonActiveLocationResults[0].result.geometry.location.lat();
                 long = nonActiveLocationResults[0].result.geometry.location.lng();
                 locationLatLng = {lat: lati, lng: long};
-                buildLocalMarkers(nonActiveLocationResults[0].greaterLocationIndex, locationLatLng, nonActiveLocationResults[0].result)
+                buildLocalMarkers(nonActiveLocationResults[0].greaterLocationIndex, locationLatLng, nonActiveLocationResults[0].result);
                 localMarkerInfo.push(nonActiveLocationResults[0].result);
             }
         }
@@ -372,7 +365,7 @@ buildLocalMarkers = function(locationsArrayIndex, locationLatLng, textSearchResu
 
     } else {
 
-        var localMarker = new google.maps.Marker({
+        let localMarker = new google.maps.Marker({
             position: locationLatLng,
             title: textSearchResultData.name,
             map: map,
@@ -436,7 +429,7 @@ closeAllInfoWindows = function () {
  * @description Does a Google places search for general locations around the wider marker. Currently unused
  */
 loadNearbySearchData = function(placeSearch, index){
-    var service = new google.maps.places.PlacesService(map);
+    let service = new google.maps.places.PlacesService(map);
     service.nearbySearch(placeSearch, function (results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
             results.forEach(function (results, i) {
@@ -471,7 +464,7 @@ localInfoWindowPageConstructor = function (marker, textSearchResultData) {
     let typeIcon = textSearchResultData.icon;
     let locationAddy = textSearchResultData.vicinity;
     let placePhotos = function() {
-        let outputImages = ""
+        let outputImages = "";
         if (textSearchResultData.photos === undefined) {
             outputImages = "https://blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png";
             return outputImages
@@ -483,13 +476,8 @@ localInfoWindowPageConstructor = function (marker, textSearchResultData) {
             });
             return outputImages
         }
-    }
-    //var windowHTML = "<div class='local-info-window'>" + locationName + "<img src='" + typeIcon + "' >" + "<br><br>" + locationAddy + "<br><br>"+ "<img src='" + placePhoto() + "' >" + "</div>";
+    };
     let windowHTML = "<div class='local-info-window'><div class='location-name-top'><div class='location-name-text'>" + locationName + "</div><img class='type-icon' src='" + typeIcon +"'></div><div class = location-lower-container><div class='location-address'>" + locationAddy + "</div><div class='location-image-container'>" + placePhotos() + "</div></div></div>";
-
-
-
-
     return windowHTML;
 };
 /**
@@ -504,7 +492,7 @@ addInfoWindow = function (marker) {
         let infowindow = new google.maps.InfoWindow({
             content: infoWindowPageConstructor(marker)
     });
-        closeAllInfoWindows()
+        closeAllInfoWindows();
         infowindow.open(map, markers[marker.id]);
         openedWindows.push(infowindow);
     });
@@ -535,7 +523,7 @@ addLocalInfoWindow = function (localMarker, textSearchResultData) {
         let infowindow = new google.maps.InfoWindow({
             content: localInfoWindowPageConstructor(localMarker, textSearchResultData)
         });
-        closeAllInfoWindows()
+        closeAllInfoWindows();
         infowindow.open(map, localMarker);
         openedWindows.push(infowindow);
     });

@@ -6,7 +6,7 @@
  * @param location {string}
  */
 
-var observableLocation = function (data, index, location) {
+const observableLocation = function (data, index, location) {
     this.title = ko.observable(data.title);
     this.latLng = ko.observable(data.location);
     this.index = ko.observable(index);
@@ -38,22 +38,22 @@ var observableLocation = function (data, index, location) {
  * @param markerIndex {number} index of the local location name
  */
 
-var observableLocalLocation = function(textSearchObject, locationsArrayIndex, locationSearch, markerIndex){
+const observableLocalLocation = function(textSearchObject, locationsArrayIndex, locationSearch, markerIndex){
     this.name = ko.observable(textSearchObject.name);
     this.markerIndex = markerIndex;
-    this.locationIcon = ko.observable(textSearchObject.icon)
+    this.locationIcon = ko.observable(textSearchObject.icon);
     this.greaterLocation = ko.observable(locations[locationsArrayIndex].title);
     this.locationID = ko.observable(textSearchObject.id);
     this.locationVisible = ko.computed(function () {
         if (locationSearch() === "") { // if the search field is empty, turn all markers on and set visible to true
-            toggleAllMarkersOn()
+            toggleAllMarkersOn();
             return true
         } else {
             if (this.name().toUpperCase().indexOf(locationSearch().toUpperCase())) { //location() is the search field value
-                toggleMarker(this.markerIndex, 'off')
+                toggleMarker(this.markerIndex, 'off');
                 return false
             } else {
-                toggleMarker(this.markerIndex, 'on')
+                toggleMarker(this.markerIndex, 'on');
                 return true
             }
         }}, this)
@@ -68,10 +68,10 @@ var observableLocalLocation = function(textSearchObject, locationsArrayIndex, lo
  */
 
 
-var viewModel = function () {
-    var self = this;
-    self.missingLocationsObservable = ko.observable(0)
-    self.locationSearch = ko.observable("")
+const viewModel = function () {
+    let self = this;
+    self.missingLocationsObservable = ko.observable(0);
+    self.locationSearch = ko.observable("");
     self.koLocationList = ko.observableArray([]);
     self.koLocalLocationList = ko.observableArray([]);
     locations.forEach(function (location, index) {
