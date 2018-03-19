@@ -41,8 +41,8 @@ function loadWikiData(location, markerIndex) {
     }
 
     function ImageSearchCallback(data) {
-        pageId = data.query.pageids[0];
-        imageLocation = data.query.pages[pageId].images;
+        let pageId = data.query.pageids[0];
+        let imageLocation = data.query.pages[pageId].images;
         imageLocation.forEach(function (image) {
             getWikiImgUrl(image.title, markerIndex)
         })
@@ -68,15 +68,15 @@ function loadWikiData(location, markerIndex) {
             summaryCallback(data);
             clearTimeout(wikiSummaryRequestTimeout);
         },
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-            ajaxError("Explain Text")
+        error: function (XMLHttpRequest) {
+            ajaxError("Explain Text");
             if (XMLHttpRequest.readyState === 0) {
                 ajaxError("Explain Text")
             }
 
         }
 
-    }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+    }).fail(function (XMLHttpRequest) {
         if (XMLHttpRequest.readyState === 0) {
         }
 
@@ -98,13 +98,13 @@ function loadWikiData(location, markerIndex) {
             ImageSearchCallback(data);
             clearTimeout(wikiRequestTimeout);
         },
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
+        error: function (XMLHttpRequest) {
             if (XMLHttpRequest.readyState === 0) {
                 ajaxError("Explain Text Failed to Load")
             }
         }
 
-    }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+    }).fail(function (XMLHttpRequest) {
         if (XMLHttpRequest.readyState === 0) {
             ajaxError("Wiki Page Image Data Failed to Load")
         }
@@ -127,7 +127,7 @@ function getWikiImgUrl(wikiImgId, markerIndex) {
 
     }, 2000);
     function imageUrlCallback(data){
-        pageId = data.query.pageids[0];
+       let pageId = data.query.pageids[0];
         placeInfo[markerIndex].wikiData.ImageSearch.push(data.query.pages[pageId].imageinfo[0].url)
     }
 
@@ -154,8 +154,8 @@ function getWikiImgUrl(wikiImgId, markerIndex) {
             ajaxError()
         }
 
-    }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
-        ajaxError("Image URLs failed")
+    }).fail(function (XMLHttpRequest) {
+        ajaxError("Image URLs failed");
         if (XMLHttpRequest.readyState === 0) {
             ajaxError("Image URLs failed")
         }

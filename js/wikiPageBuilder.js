@@ -66,7 +66,7 @@ openGreaterLocationMenu = function () {
     if ($(window).width() < 1366) {
         $("#mainLocationSelectors").toggle()
     }
-}
+};
 
 /**
  * @function resetPage
@@ -75,16 +75,16 @@ openGreaterLocationMenu = function () {
  */
 
 resetPage = function () {
-    cancelLocalLocationResponseTimeouts()
-    toggleLoaderAnimation.clearCount()
+    cancelLocalLocationResponseTimeouts();
+    toggleLoaderAnimation.clearCount();
     resetMissingLocationCount();
     removeMissingLocationElement();
     document.getElementById("location-header").classList.remove("invisible");
     document.getElementById("outer-location-container").classList.remove("outer-location-minwidth");
-    document.getElementById("localLocationList").style.height = "95%"
+    document.getElementById("localLocationList").style.height = "95%";
     document.getElementById("outer-location-container").classList.remove("portrait-invisible");
     document.getElementById("wikiContainer").classList.remove("portrait-invisible");
-}
+};
 
 /*
 lets user close the wiki display window to save space.
@@ -127,7 +127,6 @@ $(window).load(function () {
     $welcomeMessageCloseButton.attr({"onClick": 'closeWelcomeWindow()'});
     $welcomeMessageInnerContainer.append($welcomeMessageTitle).append($welcomeMessageContent).append($welcomeMessageFooter.append($welcomeMessageCloseButton));
     $welcomeOverlay.append($welcomeMessageContainer.append($welcomeMessageInnerContainer));
-
     $(document.body).prepend($welcomeOverlay)
 });
 

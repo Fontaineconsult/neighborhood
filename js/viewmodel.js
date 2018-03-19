@@ -1,6 +1,6 @@
 /**
  * @class observableLocation
- * @description the observable locations are the six buttons at the top of the screen. clicking them fires off the events necessary to load the local loxations
+ * @description the observable locations are the six buttons at the top of the screen. clicking them fires off the events necessary to load the local locations
  * @param data {object}
  * @param index {number}
  * @param location {string}
@@ -31,7 +31,7 @@ const observableLocation = function (data, index, location) {
 
 /**
  * @class observableLocalLocation
- * @description the local locations are the invidivual markers that are loaded when the location buttons are pressed
+ * @description the local locations are the individual markers that are loaded when the location buttons are pressed
  * @param textSearchObject {object} The returned google places API object
  * @param locationsArrayIndex {number} the index of the greater location
  * @param locationSearch {string} whatever is passed in by the search box

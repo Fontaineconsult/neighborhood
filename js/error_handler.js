@@ -8,7 +8,7 @@ let counterVisible = false;
  * @param greaterLocationIndex
  */
 const googlePlacesApiUnknownErr = function (greaterLocationIndex) {
-    console.log("Can't load greater location ", greaterLocationIndex)
+    console.log("Can't load greater location ", greaterLocationIndex);
     let alertMessage = "Can't load the Google Map JS Api";
     window.alert(alertMessage)
 
@@ -18,8 +18,8 @@ const googlePlacesApiUnknownErr = function (greaterLocationIndex) {
  * @description called when markers are not successfully pushed into their respective arrays
  */
 const undefinedMarkerErr = function () {
-    console.log("Couldn't Find Marker Data")
-    let alertMessage = "Can't load marker data"
+    console.log("Couldn't Find Marker Data");
+    let alertMessage = "Can't load marker data";
     window.alert(alertMessage)
 };
 
@@ -45,14 +45,14 @@ const generalDisconnectedHandler = function (error) {
  */
 
 const ajaxError = function (error) {
-    console.log("AJAX ERROR ", error)
-    let alertMessage = "Something went wrong a Wikipedia data request"
+    console.log("AJAX ERROR ", error);
+    let alertMessage = "Something went wrong a Wikipedia data request";
     window.alert(alertMessage)
 };
 
 /**
  * @function noResponseCallback
- * @description decrements the loader animation counter and calls localLocationNoReponse function
+ * @description decrements the loader animation counter and calls localLocationNoResponse function
  * @param localLocationName
  */
 const noResponseCallback = function (localLocationName) {
@@ -83,9 +83,9 @@ const cancelLocalLocationResponseTimeouts = function () {
 
 const localLocationNoResponse = function (location) {
     console.log('No location response from ' + location);
-    missingLocationsElementToggle()
-    missingLocationCount++
-    counterVisible = true
+    missingLocationsElementToggle();
+    missingLocationCount++;
+    counterVisible = true;
     activeViewModel.missingLocationsObservable(missingLocationCount)
 };
 
@@ -121,24 +121,22 @@ const removeMissingLocationElement = function () {
 
 };
 
-
-
 const resetMissingLocationCount = function () {
     missingLocationCount = 0
-}
+};
 const toggleLoaderAnimation =  {
     requestCount: 0,
     addCount() {
-        toggleLoaderAnimation.requestCount++
+        toggleLoaderAnimation.requestCount++;
         toggleLoaderAnimation.refresh()
     },
     removeCount() {
-        toggleLoaderAnimation.requestCount--
+        toggleLoaderAnimation.requestCount--;
         toggleLoaderAnimation.refresh()
     },
 
     clearCount() {
-        toggleLoaderAnimation.requestCount = 0
+        toggleLoaderAnimation.requestCount = 0;
         toggleLoaderAnimation.refresh()
     },
 

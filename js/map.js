@@ -141,7 +141,7 @@ loadTextSearchData = function (locationsArrayIndex) {
                 toggleLoaderAnimation.removeCount()
             }
         }; // each location tracker object can call the google API independly, giving me a bit of flexibility in re-requesting the data if a prior request fails.
-        this.setStatus = function (value) {
+        this.setStatus = function () {
             this.requestStatus.requestComplete = true;
             this.cancelResponseTimeout();
             toggleLoaderAnimation.removeCount()
@@ -149,7 +149,7 @@ loadTextSearchData = function (locationsArrayIndex) {
         this.setLock = function (value, timeout) {
             timeout = timeout || true;
 
-            setFalse = function () {
+            let setFalse = function () {
                 self.requestStatus.locked = false
 
             };
@@ -183,14 +183,14 @@ loadTextSearchData = function (locationsArrayIndex) {
      */
     function initLocalLocationLoop(){
         keepTrackOfLocalLocations = [];
-        locations[locationsArrayIndex].localLocations.forEach(function (localLocation, index) {
+        locations[locationsArrayIndex].localLocations.forEach(function (localLocation) {
             let localLocationData = localMarkerInfo.filter(function(object){ //checks if google place data already exists in local array
 
                 return object.name === localLocation.locationName});
             if (localLocationData.length > 0) { // if it does, use it.
                 const lati = localLocationData[0].geometry.location.lat();
                 const long = localLocationData[0].geometry.location.lng();
-                locationLatLng = {lat: lati, lng: long};
+                let locationLatLng = {lat: lati, lng: long};
                 buildLocalMarkers(locationsArrayIndex, locationLatLng, localLocationData[0]);
 
             } else { // make google place API request.
@@ -206,7 +206,7 @@ loadTextSearchData = function (locationsArrayIndex) {
      * @param status {boolean} set to true if a places API response includes the name of local Location
      */
     function setLocationTrackerStatus(localLocation, status){
-        index = keepTrackOfLocalLocations.findIndex(function (element) {
+        let index = keepTrackOfLocalLocations.findIndex(function (element) {
             return element.requestStatus.location.locationName.toLowerCase() === localLocation.toLowerCase()
         });
         if (index !== -1) {
@@ -266,18 +266,18 @@ loadTextSearchData = function (locationsArrayIndex) {
                 if (locationNameMatch.length > 1) {
                     locationNameMatch.forEach(function (location) {
                         if (locations[activeLocation].localLocations.filter(localLocation => (localLocation.keyword === location.vicinity)).length > 0) {
-                            lati = location.geometry.location.lat();
-                            long = location.geometry.location.lng();
-                            locationLatLng = {lat: lati, lng: long};
+                            let lati = location.geometry.location.lat();
+                            let long = location.geometry.location.lng();
+                            let locationLatLng = {lat: lati, lng: long};
                             buildLocalMarkers(locationsArrayIndex, locationLatLng, location);
                             setLocationTrackerStatus(location.name, true);
                             localMarkerInfo.push(location);
                         }
                     })
                 } else if (locationNameMatch.length === 1) {
-                    lati = locationNameMatch[0].geometry.location.lat();
-                    long = locationNameMatch[0].geometry.location.lng();
-                    locationLatLng = {lat: lati, lng: long};
+                    let lati = locationNameMatch[0].geometry.location.lat();
+                    let long = locationNameMatch[0].geometry.location.lng();
+                    let locationLatLng = {lat: lati, lng: long};
                     buildLocalMarkers(locationsArrayIndex, locationLatLng, locationNameMatch[0]);
                     setLocationTrackerStatus(locationNameMatch[0].name, true);
                     localMarkerInfo.push(locationNameMatch[0]);
@@ -317,9 +317,9 @@ loadTextSearchData = function (locationsArrayIndex) {
                 })
             });
             if (nonActiveLocationResults.length === 1) {
-                lati = nonActiveLocationResults[0].result.geometry.location.lat();
-                long = nonActiveLocationResults[0].result.geometry.location.lng();
-                locationLatLng = {lat: lati, lng: long};
+                let lati = nonActiveLocationResults[0].result.geometry.location.lat();
+                let long = nonActiveLocationResults[0].result.geometry.location.lng();
+                let locationLatLng = {lat: lati, lng: long};
                 buildLocalMarkers(nonActiveLocationResults[0].greaterLocationIndex, locationLatLng, nonActiveLocationResults[0].result);
                 localMarkerInfo.push(nonActiveLocationResults[0].result);
             }
@@ -334,7 +334,7 @@ loadTextSearchData = function (locationsArrayIndex) {
     function localSearchRetry(length) {
         let waitTimeOutput = length * 100 + 1000;
         setTimeout(function () {
-            for (i=0; i <= apiErrors * 2; i++) {
+            for (let i=0; i <= apiErrors * 2; i++) {
                 findLocationToRetry()
             }
         }, waitTimeOutput)
@@ -342,7 +342,7 @@ loadTextSearchData = function (locationsArrayIndex) {
 
     }
     initLocalLocationLoop()
-}
+};
 
 
 /**
@@ -432,7 +432,7 @@ loadNearbySearchData = function(placeSearch, index){
     let service = new google.maps.places.PlacesService(map);
     service.nearbySearch(placeSearch, function (results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
-            results.forEach(function (results, i) {
+            results.forEach(function (results) {
                 placeInfo[index].googlePlaceData.push(results)
             });
         } else {
@@ -450,8 +450,8 @@ loadNearbySearchData = function(placeSearch, index){
 infoWindowPageConstructor = function (marker) {
     let cityTitle = marker.title;
     let quickDescription = placeInfo[marker.id].wikiData.summary[0].split(".",1)[0];
-    let windowHTML = "<div>" + cityTitle + "<br><br>" + quickDescription + "</div>";
-    return windowHTML
+    return "<div>" + cityTitle + "<br><br>" + quickDescription + "</div>";
+
 };
 /**
  * @function localInfoWindowPageConstructor
@@ -477,8 +477,8 @@ localInfoWindowPageConstructor = function (marker, textSearchResultData) {
             return outputImages
         }
     };
-    let windowHTML = "<div class='local-info-window'><div class='location-name-top'><div class='location-name-text'>" + locationName + "</div><img class='type-icon' src='" + typeIcon +"'></div><div class = location-lower-container><div class='location-address'>" + locationAddy + "</div><div class='location-image-container'>" + placePhotos() + "</div></div></div>";
-    return windowHTML;
+    return "<div class='local-info-window'><div class='location-name-top'><div class='location-name-text'>" + locationName + "</div><img class='type-icon' src='" + typeIcon +"'></div><div class = location-lower-container><div class='location-address'>" + locationAddy + "</div><div class='location-image-container'>" + placePhotos() + "</div></div></div>";
+
 };
 /**
  * @function addInfoWindow
