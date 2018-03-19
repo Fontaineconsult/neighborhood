@@ -5,37 +5,37 @@
  *@default
  *@description Google Maps map variable
  */
-var map;
+let map;
 /**
  *@var
  *@default
  *@description Holds the wider location markers that are placed after running initMap
  */
-var markers = [];
+let markers = [];
 /**
  *@var
  *@default
  *@description Holds the various markers for each wider location.
  */
-var localMarkers = [];
+let localMarkers = [];
 /**
  *@var
  *@default
  *@description Holds business and photos info for each wider location
  */
-var placeInfo = [];
+let placeInfo = [];
 /**
  *@var
  *@default
  *@description Holds the instance of an open google maps infoWindow
  */
-var openedWindows = [];
+let openedWindows = [];
 /**
  *@var
  *@default
  *@description Holds the data used to populate info windows for each local marker
  */
-var localMarkerInfo = [];
+let localMarkerInfo = [];
 
 
 
@@ -67,9 +67,9 @@ function initMap() {
     });
 
     locations.forEach(function (location, locationsArrayIndex) {
-        var position = location.location;
-        var title = location.title;
-        var placeSearch = {
+        let position = location.location;
+        let title = location.title;
+        let placeSearch = {
             location: position,
             radius: 10000,
             type: ['point_of_interest']
@@ -83,7 +83,7 @@ function initMap() {
         });
         loadNearbySearchData(placeSearch, locationsArrayIndex);
         loadWikiData(title, locationsArrayIndex);
-        var marker = new google.maps.Marker({
+        let marker = new google.maps.Marker({
             position: position,
             icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
             title: title,
@@ -191,7 +191,7 @@ loadTextSearchData = function (locationsArrayIndex) {
     function initLocalLocationLoop(){
         keepTrackOfLocalLocations = []
         locations[locationsArrayIndex].localLocations.forEach(function (localLocation, index) {
-            var localLocationData = localMarkerInfo.filter(function(object){ //checks if google place data already exists in local array
+            let localLocationData = localMarkerInfo.filter(function(object){ //checks if google place data already exists in local array
 
                 return object.name === localLocation.locationName});
             if (localLocationData.length > 0) { // if it does, use it.
@@ -227,7 +227,7 @@ loadTextSearchData = function (locationsArrayIndex) {
      * @description locates the first localLocationsTracker object that has not been completed and fires off a new API request with that objects name
      */
     function findLocationToRetry(){
-        var index = keepTrackOfLocalLocations.findIndex(function (element){
+        let index = keepTrackOfLocalLocations.findIndex(function (element){
             return element.requestStatus.requestComplete === false && element.requestStatus.unableToComplete === false
         });
         if (index !== -1){
@@ -243,14 +243,14 @@ loadTextSearchData = function (locationsArrayIndex) {
      */
     function googlePlacesApiCall(localLocation) { // google places API calling function
         try {
-            var googleLocation = new google.maps.LatLng(locations[activeLocation].location.lat, locations[activeLocation].location.lng); // make a latlng object
-            var request = {
+            let googleLocation = new google.maps.LatLng(locations[activeLocation].location.lat, locations[activeLocation].location.lng); // make a latlng object
+            let request = {
                 location: googleLocation,
                 name: localLocation.locationName, //is the name in locations.localLocations
                 keyword: localLocation.keyword,
                 rankBy: google.maps.places.RankBy.DISTANCE
             }; // the request object
-            var service = new google.maps.places.PlacesService(map);
+            let service = new google.maps.places.PlacesService(map);
             service.nearbySearch(request, textSearchCallback); // make the API call
         } catch (ReferenceError) {
             generalDisconnectedHandler(ReferenceError)
@@ -265,7 +265,7 @@ loadTextSearchData = function (locationsArrayIndex) {
             if (status === google.maps.places.PlacesServiceStatus.OK) {
                 let locationNameMatch = []; // results that match the current viewed location
 
-                for (var i = 0; i < results.length; i++) {
+                for (let i = 0; i < results.length; i++) {
                     if (locations[activeLocation].localLocations.filter(localLocation => (localLocation.locationName.toLowerCase() === results[i].name.toLowerCase())).length > 0) {
                         locationNameMatch.push(results[i])
                     }
@@ -310,10 +310,11 @@ loadTextSearchData = function (locationsArrayIndex) {
         }
         /**
          * @function checkNonActiveLocations
+         * @description if none of the returned google places objects match local Locations in the current location, we check all  other locations for a match. This gets used mostly when the user changes locations while local locations are still loading.
          *
          */
         function checkNonActiveLocations(results) {
-            var nonActiveLocationResults = [];
+            let nonActiveLocationResults = [];
             results.forEach(function (result) {
                 locations.forEach(function (location, locationsArrayIndex) {
                     if (location.localLocations.filter(localLocations => (localLocations.locationName.toLowerCase() === result.name.toLowerCase())).length > 0) {
@@ -338,7 +339,7 @@ loadTextSearchData = function (locationsArrayIndex) {
      * @param length
      */
     function localSearchRetry(length) {
-        var waitTimeOutput = length * 100 + 1000;
+        let waitTimeOutput = length * 100 + 1000;
         setTimeout(function () {
             for (i=0; i <= apiErrors * 2; i++) {
                 findLocationToRetry()
@@ -360,7 +361,7 @@ loadTextSearchData = function (locationsArrayIndex) {
  */
 buildLocalMarkers = function(locationsArrayIndex, locationLatLng, textSearchResultData) { // takes the initial location index, the initial location LatLng, and the search data for the local locations
 
-    var doesLocalMarkerExist = localMarkers.filter(function(object){ //checks if local marker already exists in the 'localMarkers' array
+    let doesLocalMarkerExist = localMarkers.filter(function(object){ //checks if local marker already exists in the 'localMarkers' array
         return object.id === textSearchResultData.id});
 
     if (doesLocalMarkerExist.length === 1) {
@@ -379,8 +380,8 @@ buildLocalMarkers = function(locationsArrayIndex, locationLatLng, textSearchResu
             id: textSearchResultData.id,
             greaterLocationIndex: locationsArrayIndex
         });
-        var markerIndexReturn = localMarkers.push(localMarker);
-        var index = markerIndexReturn - 1;
+        let markerIndexReturn = localMarkers.push(localMarker);
+        let index = markerIndexReturn - 1;
         addLocalInfoWindow(localMarker, textSearchResultData);
         activeViewModel.updateLocalObservableLocations(textSearchResultData, locationsArrayIndex, index)
 
@@ -454,9 +455,9 @@ loadNearbySearchData = function(placeSearch, index){
  * @param marker {number} index of the locations.locations markers
  */
 infoWindowPageConstructor = function (marker) {
-    var cityTitle = marker.title;
-    var quickDescription = placeInfo[marker.id].wikiData.summary[0].split(".",1)[0];
-    var windowHTML = "<div>" + cityTitle + "<br><br>" + quickDescription + "</div>";
+    let cityTitle = marker.title;
+    let quickDescription = placeInfo[marker.id].wikiData.summary[0].split(".",1)[0];
+    let windowHTML = "<div>" + cityTitle + "<br><br>" + quickDescription + "</div>";
     return windowHTML
 };
 /**
@@ -466,25 +467,25 @@ infoWindowPageConstructor = function (marker) {
  * @param textSearchResultData {object} google places data for this marker.
  */
 localInfoWindowPageConstructor = function (marker, textSearchResultData) {
-    var locationName = textSearchResultData.name;
-    var typeIcon = textSearchResultData.icon;
-    var locationAddy = textSearchResultData.vicinity;
-    var placePhotos = function() {
-        var outputImages = ""
+    let locationName = textSearchResultData.name;
+    let typeIcon = textSearchResultData.icon;
+    let locationAddy = textSearchResultData.vicinity;
+    let placePhotos = function() {
+        let outputImages = ""
         if (textSearchResultData.photos === undefined) {
             outputImages = "https://blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png";
             return outputImages
         } else {
             textSearchResultData.photos.forEach(function (photoObject) {
-                var photoUrl = photoObject.getUrl({maxWidth:200,maxHeight:200});
-                var imgTag = "<img class='local-location-image' src='" + photoUrl + "'>";
+                let photoUrl = photoObject.getUrl({maxWidth:200,maxHeight:200});
+                let imgTag = "<img class='local-location-image' src='" + photoUrl + "'>";
                 outputImages = outputImages + imgTag
             });
             return outputImages
         }
     }
     //var windowHTML = "<div class='local-info-window'>" + locationName + "<img src='" + typeIcon + "' >" + "<br><br>" + locationAddy + "<br><br>"+ "<img src='" + placePhoto() + "' >" + "</div>";
-    var windowHTML = "<div class='local-info-window'><div class='location-name-top'><div class='location-name-text'>" + locationName + "</div><img class='type-icon' src='" + typeIcon +"'></div><div class = location-lower-container><div class='location-address'>" + locationAddy + "</div><div class='location-image-container'>" + placePhotos() + "</div></div></div>";
+    let windowHTML = "<div class='local-info-window'><div class='location-name-top'><div class='location-name-text'>" + locationName + "</div><img class='type-icon' src='" + typeIcon +"'></div><div class = location-lower-container><div class='location-address'>" + locationAddy + "</div><div class='location-image-container'>" + placePhotos() + "</div></div></div>";
 
 
 
@@ -500,7 +501,7 @@ addInfoWindow = function (marker) {
 
     markers[marker.id].addListener('click', function() {
 
-        var infowindow = new google.maps.InfoWindow({
+        let infowindow = new google.maps.InfoWindow({
             content: infoWindowPageConstructor(marker)
     });
         closeAllInfoWindows()
@@ -515,7 +516,7 @@ addInfoWindow = function (marker) {
  */
 zoomToMarker = function (markerIndex) { //zooms to localLocation marker
 
-    var marker = localMarkers.filter(function(object){return object.id === markerIndex});
+    let marker = localMarkers.filter(function(object){return object.id === markerIndex});
     map.setZoom(17);
     map.panTo(marker[0].position)
 
@@ -531,7 +532,7 @@ addLocalInfoWindow = function (localMarker, textSearchResultData) {
 
     localMarker.addListener('click', function() {
 
-        var infowindow = new google.maps.InfoWindow({
+        let infowindow = new google.maps.InfoWindow({
             content: localInfoWindowPageConstructor(localMarker, textSearchResultData)
         });
         closeAllInfoWindows()

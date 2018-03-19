@@ -1,5 +1,6 @@
 /**
  * @class observableLocation
+ * @description the observable locations are the six buttons at the top of the screen. clicking them fires off the events necessary to load the local loxations
  * @param data {object}
  * @param index {number}
  * @param location {string}
@@ -30,11 +31,11 @@ var observableLocation = function (data, index, location) {
 
 /**
  * @class observableLocalLocation
- * @description
- * @param textSearchObject {object}
- * @param locationsArrayIndex {number}
- * @param locationSearch {string}
- * @param markerIndex {number}
+ * @description the local locations are the invidivual markers that are loaded when the location buttons are pressed
+ * @param textSearchObject {object} The returned google places API object
+ * @param locationsArrayIndex {number} the index of the greater location
+ * @param locationSearch {string} whatever is passed in by the search box
+ * @param markerIndex {number} index of the local location name
  */
 
 var observableLocalLocation = function(textSearchObject, locationsArrayIndex, locationSearch, markerIndex){
@@ -60,7 +61,11 @@ var observableLocalLocation = function(textSearchObject, locationsArrayIndex, lo
 };
 
 
-
+/**
+ * @function viewModel
+ * @description The Knockout.JS viewModel object. Handles knockout related MVVM functions.
+ *
+ */
 
 
 var viewModel = function () {
@@ -86,17 +91,15 @@ var viewModel = function () {
         viewModelClickInit(index.index());
         constructWikiHtml(index.index());
         openGreaterLocationMenu();
-
-
     };
 
     self.updateLocalObservableLocations = function (textSearchObject, locationsArrayIndex, index) {//textSearchObject = google places API data for locals location search. locationsArrayIndex = the index of the greater location buttons
-        var localMarker = locations[locationsArrayIndex].title;
-        var obslocalloc = new observableLocalLocation(textSearchObject, locationsArrayIndex, self.locationSearch, index);
+        let localMarker = locations[locationsArrayIndex].title;
+        let obslocalloc = new observableLocalLocation(textSearchObject, locationsArrayIndex, self.locationSearch, index);
         if (localMarker !== undefined) {
             if (self.koLocalLocationList().length > 0) { //this means there are already knockout observable markers on the screen
                 if (self.koLocalLocationList()[0].greaterLocation() === localMarker) {//if the first komarker buttons 'greater location' property matches location array index passed by map.js
-                    var nameMatch = ko.utils.arrayFirst(self.koLocalLocationList(), function (obsLocLocName) { //looks at the koLocalLocationlist observable array to see if the object already exists
+                    let nameMatch = ko.utils.arrayFirst(self.koLocalLocationList(), function (obsLocLocName) { //looks at the koLocalLocationlist observable array to see if the object already exists
                         return textSearchObject.name === obsLocLocName.name()
                     });
                     if (!nameMatch) {
@@ -114,7 +117,7 @@ var viewModel = function () {
         }
     }
 };
-var activeViewModel = new viewModel();
+const activeViewModel = new viewModel();
 ko.applyBindings(activeViewModel);
 
 

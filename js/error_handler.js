@@ -1,6 +1,12 @@
 let missingLocationCount = 0;
 let counterVisible = false;
 
+
+/**
+ * @function googlePlacesApiUnknownErr
+ * @description a general catch for google api errors. Usually only fires when the map data fails to load completely
+ * @param greaterLocationIndex
+ */
 const googlePlacesApiUnknownErr = function (greaterLocationIndex) {
     let errorCalls = 0;
     errorCalls++;
@@ -13,9 +19,21 @@ const googlePlacesApiUnknownErr = function (greaterLocationIndex) {
 
 };
 
+
+/**
+ * @function undefinedMarkerErr
+ * @description called when markers are not successfully pushed into their respective arrays
+ */
 const undefinedMarkerErr = function () {
     console.log("Couldn't Find Marker Data")
 };
+
+/**
+ * @function generalDisconnectHandler
+ * @description called when the google map api call fails
+ * @param error
+ */
+
 
 const generalDisconnectedHandler = function (error) {
     console.log("General Disconnect " + error);
@@ -25,14 +43,31 @@ const generalDisconnectedHandler = function (error) {
 
 };
 
+/**
+ * @function ajaxError
+ * @description general handler for wiki ajax failures beyond the build in ajax error methods
+ * @param error
+ */
+
 const ajaxError = function (error) {
     console.log("AJAX ERROR ", error)
 };
+
+/**
+ * @function noResponseCallback
+ * @description decrements the loader animation counter and calls localLocationNoReponse function
+ * @param localLocationName
+ */
 const noResponseCallback = function (localLocationName) {
     localLocationNoResponse(localLocationName);
     toggleLoaderAnimation.removeCount()
 };
 
+
+/**
+ * @function cancelLocalLocationResponseTimeouts
+ * @description called when a location button is pressed. Cancels the response timeouts for all the tracked locations
+ */
 
 const cancelLocalLocationResponseTimeouts = function () {
     keepTrackOfLocalLocations.forEach(function (trackedLocation) {
@@ -43,17 +78,26 @@ const cancelLocalLocationResponseTimeouts = function () {
 
 }
 
+/**
+ * @function localLocationNoResponse
+ * @description  calls the missing location counter increment function and passes the value to the KO counter object
+ * @param location
+ */
+
 const localLocationNoResponse = function (location) {
     console.log('No location response from ' + location);
-
     missingLocationsElementToggle()
     missingLocationCount++
     counterVisible = true
     activeViewModel.missingLocationsObservable(missingLocationCount)
 };
 
+/**
+ * @function missingLocationsElementToggle
+ * @description toggles the missing location counter element.
+ */
+
 const missingLocationsElementToggle = function () {
-    console.log($("#missinglocationcounter").length);
     if (counterVisible === false) {
         let totalLocationCount = locations[activeLocation].localLocations.length;
         document.getElementById("missingLocationContainer").classList.remove("invisible");
@@ -62,6 +106,12 @@ const missingLocationsElementToggle = function () {
         counterVisible = true
     }
 };
+
+/**
+ * @function removeMissingLocationElement
+ * @description removes the missing location counter element
+ */
+
 const removeMissingLocationElement = function () {
     if (counterVisible === true) {
         $("#missingLocationCounter").remove();
@@ -73,6 +123,9 @@ const removeMissingLocationElement = function () {
 
 
 };
+
+
+
 const resetMissingLocationCount = function () {
     missingLocationCount = 0
 }
@@ -93,7 +146,6 @@ const toggleLoaderAnimation =  {
     },
 
     refresh() {
-
         if (toggleLoaderAnimation.requestCount > 0) {
             if ($("#loaderContainer").length === 0) {
                 $("#location-header").append("<div id='loaderContainer'><div class='loader'></div></div>")
