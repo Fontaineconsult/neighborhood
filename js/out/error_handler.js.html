@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: error_handler.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: error_handler.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>let missingLocationCount = 0;
+let counterVisible = false;
+
+
+/**
+ * @function googlePlacesApiUnknownErr
+ * @description a general catch for google api errors. Usually only fires when the map data fails to load completely
+ * @param greaterLocationIndex
+ */
+const googlePlacesApiUnknownErr = function (greaterLocationIndex) {
+    let errorCalls = 0;
+    errorCalls++;
+    function insertLoaderDiv() {
+        if (errorCalls === 1) {
+            $("#location-header").append("&lt;div id='loaderContainer'>&lt;div class='loader'>&lt;/div>&lt;/div>")
+        }
+    }
+
+
+};
+
+
+/**
+ * @function undefinedMarkerErr
+ * @description called when markers are not successfully pushed into their respective arrays
+ */
+const undefinedMarkerErr = function () {
+    console.log("Couldn't Find Marker Data")
+};
+
+/**
+ * @function generalDisconnectHandler
+ * @description called when the google map api call fails
+ * @param error
+ */
+
+
+const generalDisconnectedHandler = function (error) {
+    console.log("General Disconnect " + error);
+
+    $("#master-container").prepend("&lt;div class='disconnected-overlay'>&lt;/div>")
+
+
+};
+
+/**
+ * @function ajaxError
+ * @description general handler for wiki ajax failures beyond the build in ajax error methods
+ * @param error
+ */
+
+const ajaxError = function (error) {
+    console.log("AJAX ERROR ", error)
+};
+
+/**
+ * @function noResponseCallback
+ * @description decrements the loader animation counter and calls localLocationNoReponse function
+ * @param localLocationName
+ */
+const noResponseCallback = function (localLocationName) {
+    localLocationNoResponse(localLocationName);
+    toggleLoaderAnimation.removeCount()
+};
+
+
+/**
+ * @function cancelLocalLocationResponseTimeouts
+ * @description called when a location button is pressed. Cancels the response timeouts for all the tracked locations
+ */
+
+const cancelLocalLocationResponseTimeouts = function () {
+    keepTrackOfLocalLocations.forEach(function (trackedLocation) {
+        if (trackedLocation.greaterLocationIndex === activeLocation) {
+            trackedLocation.cancelResponseTimeout()
+        }
+    })
+
+};
+
+/**
+ * @function localLocationNoResponse
+ * @description  calls the missing location counter increment function and passes the value to the KO counter object
+ * @param location
+ */
+
+const localLocationNoResponse = function (location) {
+    console.log('No location response from ' + location);
+    missingLocationsElementToggle()
+    missingLocationCount++
+    counterVisible = true
+    activeViewModel.missingLocationsObservable(missingLocationCount)
+};
+
+/**
+ * @function missingLocationsElementToggle
+ * @description toggles the missing location counter element.
+ */
+
+const missingLocationsElementToggle = function () {
+    if (counterVisible === false) {
+        let totalLocationCount = locations[activeLocation].localLocations.length;
+        document.getElementById("missingLocationContainer").classList.remove("invisible");
+        $("#missingLocationContainer").append("&lt;span id='missingLocationCounter' class='missing-location-counter'>&amp;#8201of " + totalLocationCount + " locations missing&lt;/span>");
+        $("#localLocationList").css("height", "90%");
+        counterVisible = true
+    }
+};
+
+/**
+ * @function removeMissingLocationElement
+ * @description removes the missing location counter element
+ */
+
+const removeMissingLocationElement = function () {
+    if (counterVisible === true) {
+        $("#missingLocationCounter").remove();
+        $("#localLocationList").removeAttr("style");
+        document.getElementById("missingLocationContainer").classList.add("invisible");
+        counterVisible = false;
+        activeViewModel.missingLocationsObservable(0)
+    }
+
+
+};
+
+
+
+const resetMissingLocationCount = function () {
+    missingLocationCount = 0
+}
+const toggleLoaderAnimation =  {
+    requestCount: 0,
+    addCount() {
+        toggleLoaderAnimation.requestCount++
+        toggleLoaderAnimation.refresh()
+    },
+    removeCount() {
+        toggleLoaderAnimation.requestCount--
+        toggleLoaderAnimation.refresh()
+    },
+
+    clearCount() {
+        toggleLoaderAnimation.requestCount = 0
+        toggleLoaderAnimation.refresh()
+    },
+
+    refresh() {
+        if (toggleLoaderAnimation.requestCount > 0) {
+            if ($("#loaderContainer").length === 0) {
+                $("#location-header").append("&lt;div id='loaderContainer'>&lt;div class='loader'>&lt;/div>&lt;/div>")
+            }
+        } else {
+            $("#loaderContainer").remove()
+        }
+
+    }
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="localLocationsTracker.html">localLocationsTracker</a></li><li><a href="observableLocalLocation.html">observableLocalLocation</a></li><li><a href="observableLocation.html">observableLocation</a></li></ul><h3>Global</h3><ul><li><a href="global.html#activeLocation">activeLocation</a></li><li><a href="global.html#addInfoWindow">addInfoWindow</a></li><li><a href="global.html#addLocalInfoWindow">addLocalInfoWindow</a></li><li><a href="global.html#ajaxError">ajaxError</a></li><li><a href="global.html#apiErrors">apiErrors</a></li><li><a href="global.html#buildLocalMarkers">buildLocalMarkers</a></li><li><a href="global.html#cancelLocalLocationResponseTimeouts">cancelLocalLocationResponseTimeouts</a></li><li><a href="global.html#checkNonActiveLocations">checkNonActiveLocations</a></li><li><a href="global.html#closeAllInfoWindows">closeAllInfoWindows</a></li><li><a href="global.html#closeWikiPhoto">closeWikiPhoto</a></li><li><a href="global.html#constructWikiHtml">constructWikiHtml</a></li><li><a href="global.html#findLocationToRetry">findLocationToRetry</a></li><li><a href="global.html#generalDisconnectHandler">generalDisconnectHandler</a></li><li><a href="global.html#googlePlacesApiCall">googlePlacesApiCall</a></li><li><a href="global.html#googlePlacesApiUnknownErr">googlePlacesApiUnknownErr</a></li><li><a href="global.html#infoWindowPageConstructor">infoWindowPageConstructor</a></li><li><a href="global.html#initLocalLocationLoop">initLocalLocationLoop</a></li><li><a href="global.html#initMap">initMap</a></li><li><a href="global.html#loadNearbySearchData">loadNearbySearchData</a></li><li><a href="global.html#localInfoWindowPageConstructor">localInfoWindowPageConstructor</a></li><li><a href="global.html#localLocationNoResponse">localLocationNoResponse</a></li><li><a href="global.html#localMarkerInfo">localMarkerInfo</a></li><li><a href="global.html#localMarkers">localMarkers</a></li><li><a href="global.html#localSearchRetry">localSearchRetry</a></li><li><a href="global.html#map">map</a></li><li><a href="global.html#markers">markers</a></li><li><a href="global.html#missingLocationsElementToggle">missingLocationsElementToggle</a></li><li><a href="global.html#noResponseCallback">noResponseCallback</a></li><li><a href="global.html#openedWindows">openedWindows</a></li><li><a href="global.html#openGreaterLocationMenu">openGreaterLocationMenu</a></li><li><a href="global.html#panToMarker">panToMarker</a></li><li><a href="global.html#placeInfo">placeInfo</a></li><li><a href="global.html#removeMissingLocationElement">removeMissingLocationElement</a></li><li><a href="global.html#resetPage">resetPage</a></li><li><a href="global.html#setLocationTrackerStatus">setLocationTrackerStatus</a></li><li><a href="global.html#textSearchCallback">textSearchCallback</a></li><li><a href="global.html#toggleAllMarkersOn">toggleAllMarkersOn</a></li><li><a href="global.html#toggleMarker">toggleMarker</a></li><li><a href="global.html#undefinedMarkerErr">undefinedMarkerErr</a></li><li><a href="global.html#viewModel">viewModel</a></li><li><a href="global.html#viewModelClickInit">viewModelClickInit</a></li><li><a href="global.html#viewWikiPhoto">viewWikiPhoto</a></li><li><a href="global.html#zoomToMarker">zoomToMarker</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Mar 19 2018 13:31:07 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

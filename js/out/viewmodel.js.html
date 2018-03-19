@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: viewmodel.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: viewmodel.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @class observableLocation
+ * @description the observable locations are the six buttons at the top of the screen. clicking them fires off the events necessary to load the local loxations
+ * @param data {object}
+ * @param index {number}
+ * @param location {string}
+ */
+
+const observableLocation = function (data, index, location) {
+    this.title = ko.observable(data.title);
+    this.latLng = ko.observable(data.location);
+    this.index = ko.observable(index);
+    this.trueName = ko.observable(data.trueName);
+    this.locationVisible = ko.computed(function () {
+        if (location() === "") { // if the search field is empty, turn all markers on and set visible to true
+            //toggleAllMarkersOn()
+            //return true
+        } else {
+            if (this.title().indexOf(location())) { //location() is the search field value
+               // toggleMarker(this.index(), 'off');
+               // return false
+            } else {
+               // toggleMarker(this.index(), 'on');
+               // return true
+            }
+        }}, this)
+
+
+};
+
+
+/**
+ * @class observableLocalLocation
+ * @description the local locations are the invidivual markers that are loaded when the location buttons are pressed
+ * @param textSearchObject {object} The returned google places API object
+ * @param locationsArrayIndex {number} the index of the greater location
+ * @param locationSearch {string} whatever is passed in by the search box
+ * @param markerIndex {number} index of the local location name
+ */
+
+const observableLocalLocation = function(textSearchObject, locationsArrayIndex, locationSearch, markerIndex){
+    this.name = ko.observable(textSearchObject.name);
+    this.markerIndex = markerIndex;
+    this.locationIcon = ko.observable(textSearchObject.icon);
+    this.greaterLocation = ko.observable(locations[locationsArrayIndex].title);
+    this.locationID = ko.observable(textSearchObject.id);
+    this.locationVisible = ko.computed(function () {
+        if (locationSearch() === "") { // if the search field is empty, turn all markers on and set visible to true
+            toggleAllMarkersOn();
+            return true
+        } else {
+            if (this.name().toUpperCase().indexOf(locationSearch().toUpperCase())) { //location() is the search field value
+                toggleMarker(this.markerIndex, 'off');
+                return false
+            } else {
+                toggleMarker(this.markerIndex, 'on');
+                return true
+            }
+        }}, this)
+
+};
+
+
+/**
+ * @function viewModel
+ * @description The Knockout.JS viewModel object. Handles knockout related MVVM functions.
+ *
+ */
+
+
+const viewModel = function () {
+    let self = this;
+    self.missingLocationsObservable = ko.observable(0);
+    self.locationSearch = ko.observable("");
+    self.koLocationList = ko.observableArray([]);
+    self.koLocalLocationList = ko.observableArray([]);
+    locations.forEach(function (location, index) {
+      self.koLocationList.push( new observableLocation(location, index, self.locationSearch))
+    });
+
+    self.koToggleLocalLocationMarker = function () {
+
+    };
+
+    self.zoomToMarker = function (data) {
+        zoomToMarker(data.locationID())
+    };
+
+    self.koToggleMarker = function (index) {
+        resetPage();
+        viewModelClickInit(index.index());
+        constructWikiHtml(index.index());
+        openGreaterLocationMenu();
+    };
+
+    self.updateLocalObservableLocations = function (textSearchObject, locationsArrayIndex, index) {//textSearchObject = google places API data for locals location search. locationsArrayIndex = the index of the greater location buttons
+        let localMarker = locations[locationsArrayIndex].title;
+        let obslocalloc = new observableLocalLocation(textSearchObject, locationsArrayIndex, self.locationSearch, index);
+        if (localMarker !== undefined) {
+            if (self.koLocalLocationList().length > 0) { //this means there are already knockout observable markers on the screen
+                if (self.koLocalLocationList()[0].greaterLocation() === localMarker) {//if the first komarker buttons 'greater location' property matches location array index passed by map.js
+                    let nameMatch = ko.utils.arrayFirst(self.koLocalLocationList(), function (obsLocLocName) { //looks at the koLocalLocationlist observable array to see if the object already exists
+                        return textSearchObject.name === obsLocLocName.name()
+                    });
+                    if (!nameMatch) {
+                        self.koLocalLocationList.push(obslocalloc)
+                    }
+                } else {
+                    self.koLocalLocationList.removeAll();
+                    self.koLocalLocationList.push(obslocalloc)
+                }
+            } else {
+                self.koLocalLocationList.push(obslocalloc)
+            }
+        } else {
+            //do nothing
+        }
+    }
+};
+const activeViewModel = new viewModel();
+ko.applyBindings(activeViewModel);
+
+
+
+
+
+
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="localLocationsTracker.html">localLocationsTracker</a></li><li><a href="observableLocalLocation.html">observableLocalLocation</a></li><li><a href="observableLocation.html">observableLocation</a></li></ul><h3>Global</h3><ul><li><a href="global.html#activeLocation">activeLocation</a></li><li><a href="global.html#addInfoWindow">addInfoWindow</a></li><li><a href="global.html#addLocalInfoWindow">addLocalInfoWindow</a></li><li><a href="global.html#ajaxError">ajaxError</a></li><li><a href="global.html#apiErrors">apiErrors</a></li><li><a href="global.html#buildLocalMarkers">buildLocalMarkers</a></li><li><a href="global.html#cancelLocalLocationResponseTimeouts">cancelLocalLocationResponseTimeouts</a></li><li><a href="global.html#checkNonActiveLocations">checkNonActiveLocations</a></li><li><a href="global.html#closeAllInfoWindows">closeAllInfoWindows</a></li><li><a href="global.html#closeWikiPhoto">closeWikiPhoto</a></li><li><a href="global.html#constructWikiHtml">constructWikiHtml</a></li><li><a href="global.html#findLocationToRetry">findLocationToRetry</a></li><li><a href="global.html#generalDisconnectHandler">generalDisconnectHandler</a></li><li><a href="global.html#googlePlacesApiCall">googlePlacesApiCall</a></li><li><a href="global.html#googlePlacesApiUnknownErr">googlePlacesApiUnknownErr</a></li><li><a href="global.html#infoWindowPageConstructor">infoWindowPageConstructor</a></li><li><a href="global.html#initLocalLocationLoop">initLocalLocationLoop</a></li><li><a href="global.html#initMap">initMap</a></li><li><a href="global.html#loadNearbySearchData">loadNearbySearchData</a></li><li><a href="global.html#localInfoWindowPageConstructor">localInfoWindowPageConstructor</a></li><li><a href="global.html#localLocationNoResponse">localLocationNoResponse</a></li><li><a href="global.html#localMarkerInfo">localMarkerInfo</a></li><li><a href="global.html#localMarkers">localMarkers</a></li><li><a href="global.html#localSearchRetry">localSearchRetry</a></li><li><a href="global.html#map">map</a></li><li><a href="global.html#markers">markers</a></li><li><a href="global.html#missingLocationsElementToggle">missingLocationsElementToggle</a></li><li><a href="global.html#noResponseCallback">noResponseCallback</a></li><li><a href="global.html#openedWindows">openedWindows</a></li><li><a href="global.html#openGreaterLocationMenu">openGreaterLocationMenu</a></li><li><a href="global.html#panToMarker">panToMarker</a></li><li><a href="global.html#placeInfo">placeInfo</a></li><li><a href="global.html#removeMissingLocationElement">removeMissingLocationElement</a></li><li><a href="global.html#resetPage">resetPage</a></li><li><a href="global.html#setLocationTrackerStatus">setLocationTrackerStatus</a></li><li><a href="global.html#textSearchCallback">textSearchCallback</a></li><li><a href="global.html#toggleAllMarkersOn">toggleAllMarkersOn</a></li><li><a href="global.html#toggleMarker">toggleMarker</a></li><li><a href="global.html#undefinedMarkerErr">undefinedMarkerErr</a></li><li><a href="global.html#viewModel">viewModel</a></li><li><a href="global.html#viewModelClickInit">viewModelClickInit</a></li><li><a href="global.html#viewWikiPhoto">viewWikiPhoto</a></li><li><a href="global.html#zoomToMarker">zoomToMarker</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Mar 19 2018 13:31:07 GMT-0700 (Pacific Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
